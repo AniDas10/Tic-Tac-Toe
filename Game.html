@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Game</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	
+	<style type="text/css">
+		body{
+	text-align: center;
+}
+
+.board button {
+    margin: 0 auto;
+    width: 15vw;
+    max-width: 60vh;
+    height: 15vw;
+    max-height: 60vh;
+    font-size: 25px;
+    border-collapse: collapse;
+}
+
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div class="jumbotron" align="left">
+			<h1>Welcome to the Tic Tac Toe!</h1>
+			<h3>Let's get started</h3>
+		</div>
+	</div>
+	<div class="container">
+		<table align="center" class="board" border="5px solid black">
+			<tr>
+				<td><button type="button"></button></td>
+				<td><button type="button"></button></td>
+				<td><button type="button"></button></td>
+			</tr>
+			<tr>
+				<td><button type="button"></button></td>
+				<td><button type="button"></button></td>
+				<td><button type="button"></button></td>
+			</tr>
+			<tr>
+				<td><button type="button"></button></td>
+				<td><button type="button"></button></td>
+				<td><button type="button"></button></td>
+			</tr>
+		</table>
+	</div>
+
+	<script
+	  src="https://code.jquery.com/jquery-3.3.1.js"
+	  integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+	  crossorigin="anonymous"></script>
+  	<script>
+  	// player names
+var player1 = prompt("Enter your name and you are X");
+var player2 = prompt("Enter your name and you are O");
+var table = $("table tr");
+
+
+// to change value of a particular box
+function changeVal(row,col,currentVal){
+	return table.eq(row).find("td").eq(col).find("button").text(currentVal);
+}
+
+// to return value of a particular box
+function returnVal(row,col){
+	return table.eq(row).find("td").eq(col).find("button").text();
+}
+
+// check for if 3 inputs are same or not
+function valCheck(one,two,three){
+	return (one === two && one === three && one !== "" && one !== undefined);
+}
+
+
+function horizontalWin(){
+	for(var row = 0; row < 3; row++){
+		var col = 0;
+		if(valCheck(returnVal(row,col),returnVal(row,col+1),returnVal(row,col+2))){
+			console.log("horizontal");
+			return true;
+		}
+		else{
+			continue;
+		}
+	}
+}
+
+
+function verticalWin(){
+	for(var col = 0; col < 3; col++){
+		var row = 0;
+		if(valCheck(returnVal(row,col),returnVal(row+1,col),returnVal(row+2,col))){
+			console.log("vertical");
+			return true;
+		}
+		else{
+			continue;
+		}
+	}
+}
+
+function diagonalWin(){
+	var row=0, col=0;
+	if(valCheck(returnVal(row,col),returnVal(row+1,col+1),returnVal(row+2,col+2))){
+		console.log("diagonal1");
+		return true;
+	}
+	else if(valCheck(returnVal(row,col+2),returnVal(row+1,col+1),returnVal(row+2,col))){
+		console.log("diagonal2");
+		return true;
+	}
+}
+
+
+var currentPlayer = 1;
+var currentName = player1;
+var currentVal = "X";
+var count = 0;
+
+$("h3").text(currentName + " : Your turn");
+
+$(".board button").on("click",function(){
+	count = count + 1;
+	var row = $(this).closest("tr").index();
+	var col = $(this).closest("td").index();
+	changeVal(row,col,currentVal);
+
+	if (horizontalWin() || verticalWin() || diagonalWin()){
+		$("h3").fadeOut('fast');
+    	$(".board button").off();
+    	$("h1").text(currentName + " has won! Refresh your browser to play again")
+  	}
+  	else if(count === 9){
+  		$("h3").fadeOut('fast');
+    	$(".board button").off();
+    	$("h1").text("Draw! Refresh your browser to play again")
+  	}
+
+	currentPlayer = currentPlayer * -1;
+
+	if(currentPlayer === 1){
+		currentName = player1;
+		$("h3").text(currentName + " : Your turn");
+		currentVal = "X";
+	}
+	else{
+		currentName = player2;
+		$("h3").text(currentName + " : Your turn");
+		currentVal = "O";
+	} 
+})
+	
+  	</script>
+</body>	
+</html>
